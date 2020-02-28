@@ -42,11 +42,6 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer app>
-      <v-spacer />
-      <span>&copy; {{ new Date().getFullYear() }} All rights reserved.</span>
-      <v-spacer />
-    </v-footer>
   </v-app>
 </template>
 
