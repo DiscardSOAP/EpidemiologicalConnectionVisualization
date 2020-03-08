@@ -4,13 +4,14 @@
 
 <script>
 export default {
-  asyncData(context) {
+  auth: "guest",
+  asyncData (context) {
     return context.$axios.get('/api/helloworld/').then((res) => {
       const text = res.data.msg
       return { text }
     })
   },
-  data() {
+  data () {
     return {
       text: ''
     }

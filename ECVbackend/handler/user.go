@@ -58,3 +58,14 @@ func Register() gin.HandlerFunc {
 		c.JSON(200, gin.H{"msg": "Register Success!"})
 	}
 }
+
+func Profile() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.JSON(200,gin.H{
+			"user": {
+				"username": "shit!"
+				"is_active": true
+			}
+		})
+	}
+}

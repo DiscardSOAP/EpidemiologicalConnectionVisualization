@@ -16,6 +16,7 @@ func SetupRouter() *gin.Engine {
 	authorized := router.Group("/api/user", middleware.TokenAuthMiddleware())
 	{
 		authorized.GET("helloworld/", handler.HelloToUser())
+		authorized.GET("profile/", handler.Profile())
 	}
 	return router
 }
