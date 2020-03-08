@@ -47,6 +47,8 @@
 
 <script>
 export default {
+  transition: { name: "page", mode: "out-in" },
+  middleware: ["auth"],
   data () {
     return {
       drawer: false,

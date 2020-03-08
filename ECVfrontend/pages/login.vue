@@ -25,8 +25,7 @@
                 <v-btn
                   icon
                   large
-                  href="https://codepen.io/johnjleider/pen/pMvGQO"
-                  target="_blank"
+                  href="/register/"
                   v-on="on"
                 >
                   <v-icon>mdi-account-plus</v-icon>
