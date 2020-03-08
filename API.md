@@ -71,6 +71,8 @@ GET
             birth: '', # 注册时间
             organization: '', #所属组织
             description: '', #自述
+            email: '',
+            email_md5:'',
         }
     }
     ```
