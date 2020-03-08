@@ -20,36 +20,65 @@ POST
 
     ```json
     {
-        'refresh': 		# refresh token
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU3MTk4MDk5OCwianRpIjoiM2UwNzU0YWU2NmQ2NDZkYWJmZDc4OWE4YjQ1YjNjOGYiLCJ1c2VyX2lkIjoyfQ.YIEn2aJ9zkzjgpw0aN03VIHCZAmgpvohMkMAmMeQi9U',	
-        'access': 		# access token
-        'eyJ0eXA8iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTcxODk4MTk4LCJqdGkiOiIwODZiMGIxMDVkMjQ0NGVhODNlMTg0NTIyYzc1YzEwZiIsInVzZXJfaWQiOjJ9.RVxrGW5b24JpCnLSJhkyONixMllJZOIe4Hj86TpCBp',		
+        token: 		# access token
+      'eyJ0eXA8iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTcxODk4MTk4LCJqdGkiOiIwODZiMGIxMDVkMjQ0NGVhODNlMTg0NTIyYzc1YzEwZiIsInVzZXJfaWQiOjJ9.RVxrGW5b24JpCnLSJhkyONixMllJZOIe4Hj86TpCBp',		
     }
     ```
+    
+- 400 : 登录失败
 
-- 401 : 登录失败
-
-### api/refresh/
+### api/register/
 
 POST
 
-- 更新token
+- 注册
 
-- 已登录
+- 任何人
 
 - ```json
-    {'refresh':""}
+    {username:"", password:"",invitationCode:"",confirmPassword:""}
     ```
 
 - 200 : 
 
     ```json
     {
-        'access': 	# new access token
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTcxODk4NDA3LCJqdGkiOiJmMjE1Y2ZiMzhjMTA0MDNlYTQ2ZTkwMjNhNGRiZDA2MSIsInVzZXJfaWQiOjJ9.QS4-AKNhnEEzlzCKJ2clFsjHzb5hSAp4Uk1waLyraRg'
+        msg:"register success"
+    }
+    ```
+    
+-     400 : 注册失败
+
+### api/profile/
+
+GET
+
+- 个人信息
+
+- 已登录
+
+- ```json
+    {}
+    ```
+
+- 200 :
+
+    ```json
+    {
+        user: {
+            username: '', #用户名
+            name: '', # 昵称
+            birth: '', # 注册时间
+            organization: '', #所属组织
+            description: '', #自述
+        }
     }
     ```
 
     
 
-     
+- 
+
+
+
+​    
