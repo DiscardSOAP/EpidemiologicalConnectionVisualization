@@ -27,6 +27,17 @@
               v-model="registerForm.valid"
             >
               <v-text-field
+                label="Email"
+                name="email"
+                prepend-icon="mdi-account"
+                type="text"
+                v-model="registerForm.form.email"
+                :counter="50"
+                :rules="registerForm.emailRules"
+                required
+              />
+
+              <v-text-field
                 label="Username"
                 name="username"
                 prepend-icon="mdi-account"
@@ -112,6 +123,7 @@ export default {
         form: {
           username: "",
           password: "",
+          email: "",
           confirmPassword: "",
           invitationCode: "",
         },
@@ -119,6 +131,10 @@ export default {
           v => !!v || 'Username is required.',
           v => (v && v.length <= 20) || 'Username must be less than 20 characters',
           v => /[a-zA-Z0-9].{7,}/.test(v) || 'Username must be valid',
+        ],
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
         passwordRules: [
           v => !!v || 'Password is required.',
