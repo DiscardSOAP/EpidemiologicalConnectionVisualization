@@ -1,6 +1,6 @@
-# ecvfrontend
+# ecv
 
-> frontend of ECV with nuxt.js 
+> Epidemiological Connection Visualization
 
 ## Build Setup
 
