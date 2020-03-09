@@ -21,8 +21,8 @@ type RegisterJSON struct {
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data LoginJSON
-		c.JSON(400, gin.H{"msg": "Invalid Params!"})
 		if c.BindJSON(&data) != nil {
+			c.JSON(400, gin.H{"msg": "Invalid Params!"})
 			return
 		}
 		result := model.User{Username: data.Username}.Get()
@@ -61,11 +61,6 @@ func Register() gin.HandlerFunc {
 
 func Profile() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200,gin.H{
-			"user": {
-				"username": "shit!"
-				"is_active": true
-			}
-		})
+		c.JSON(200, gin.H{"user": nil})
 	}
 }
