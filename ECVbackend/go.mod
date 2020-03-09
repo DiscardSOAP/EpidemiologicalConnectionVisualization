@@ -8,6 +8,5 @@ require (
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-xorm/xorm v0.7.9
-	github.com/stretchr/testify v1.5.1
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 )
