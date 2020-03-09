@@ -4,7 +4,7 @@ import (
 	"ecvbackend/lib"
 	"ecvbackend/model"
 	"log"
-
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,6 +29,10 @@ func Login() gin.HandlerFunc {
 		log.Println(result)
 		if result != nil && lib.ComparePassword(data.Password, result.Password) {
 			if tokenString, err := lib.GetToken(data.Username); err == nil {
+				//c.SetCookie("sessionID","1",60,"/","127.0.0.1",false,true)
+				session := sessions.Default(c)
+				session.Set("loginuser", data.Username)
+				session.Save()
 				c.JSON(200, gin.H{"token": tokenString})
 				return
 			}
@@ -61,6 +65,17 @@ func Register() gin.HandlerFunc {
 
 func Profile() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200, gin.H{"user": nil})
+		session := sessions.Default(c)
+		loginuser := session.Get("loginuser")
+		username, ok := loginuser.(string)
+		if !ok {
+			c.JSON(400, gin.H{"msg": "Internal Error"})
+			return
+		}
+		pass := model.User{Username: username}.Get().Password
+		c.JSON(200,gin.H{
+			"Username":string(username),
+			"Password":pass,
+		},)
 	}
 }

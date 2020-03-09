@@ -5,11 +5,17 @@ import (
 
 	"ecvbackend/handler"
 	"ecvbackend/middleware"
+
+	"github.com/gin-contrib/sessions"
+
+	"github.com/gin-contrib/sessions/cookie"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+	store := cookie.NewStore([]byte("loginuser"))
 	router.Use(middleware.CORSMiddleware())
+	router.Use(sessions.Sessions("Sessions", store))
 	router.GET("/api/helloworld/", handler.HelloToGuest())
 	router.POST("/api/register/", handler.Register())
 	router.POST("/api/login/", handler.Login())
