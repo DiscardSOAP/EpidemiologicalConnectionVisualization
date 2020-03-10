@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"strings"
+	//"strings"
 
 	"github.com/gin-gonic/gin"
 
-	"ecvbackend/lib"
+	//"ecvbackend/lib"
 
 	"github.com/gin-contrib/sessions"
 
@@ -26,6 +26,11 @@ func GetSession(c *gin.Context) bool {
 
 func TokenAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if _, err := c.Request.Cookie("Sessions"); err == nil {
+			fmt.Println("====================================================================")
+        }else{
+			fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+		}
 		isLogin := GetSession(c)
 		fmt.Println("isLogin:",isLogin)
 		if isLogin == false {
@@ -33,7 +38,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		authHeader := string(c.GetHeader("Authorization"))
+		/*authHeader := string(c.GetHeader("Authorization"))
 		if authHeader == "" {
 			c.JSON(400, gin.H{"msg": "Authorization NOT FOUND!"})
 			c.Abort()
@@ -44,7 +49,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 			c.JSON(400, gin.H{"msg": "Invalid Token!"})
 			c.Abort()
 			return
-		}
+		}*/
 		c.Next()
 	}
 }

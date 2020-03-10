@@ -30,6 +30,8 @@ func Login() gin.HandlerFunc {
 		if result != nil && lib.ComparePassword(data.Password, result.Password) {
 			if tokenString, err := lib.GetToken(data.Username); err == nil {
 				//c.SetCookie("sessionID","1",60,"/","127.0.0.1",false,true)
+				//c.SetCookie("name", "Shimin Li", -1, "/", "localhost", false, true)
+				//log.Println("*********************************")
 				session := sessions.Default(c)
 				session.Set("loginuser", data.Username)
 				session.Save()
