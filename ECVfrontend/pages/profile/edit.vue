@@ -126,7 +126,6 @@ export default {
           name: "",
           organization: "",
           description: "",
-          username: "",
           password: "",
           newPassword: "",
           confirmNewPassword: "",

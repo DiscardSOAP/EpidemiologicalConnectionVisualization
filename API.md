@@ -36,7 +36,7 @@ POST
 - 任何人
 
 - ```json
-    {username:"", password:"",invitationCode:"",confirmPassword:""}
+    {username:""(长度>=8), password:""(长度>=8),invitationCode:""(长度=20),confirmPassword:""(长度>=8),email:""}
     ```
 
 - 200 : 
@@ -77,9 +77,33 @@ GET
     }
     ```
 
-    
 
-- 
+POST
+
+- 修改个人信息
+
+- 已登录
+
+- ```json
+    {
+            name: '', # 昵称
+            organization: '', #所属组织
+            description: '', #自述
+            password: '',
+            newPassword: '',
+            confirmNewPassword: '',
+        }
+    ```
+
+- 200 : 
+
+    ```json
+    {
+        msg:"edit profile success"
+    }
+    ```
+
+- 400 : 修改个人信息失败
 
 
 
