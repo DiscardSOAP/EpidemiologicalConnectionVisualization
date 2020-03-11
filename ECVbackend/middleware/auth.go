@@ -24,7 +24,7 @@ func GetSession(c *gin.Context) bool {
     }
 }
 
-func TokenAuthMiddleware() gin.HandlerFunc {
+func CookieAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		isLogin := GetSession(c)
 		fmt.Println("isLogin:",isLogin)

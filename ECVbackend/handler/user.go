@@ -1,11 +1,17 @@
 package handler
 
 import (
+	"crypto/md5"
 	"ecvbackend/lib"
 	"ecvbackend/model"
 	"log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"regexp"
+	"fmt"
+	"time"
+	"io"
+	"strconv"
 )
 
 type LoginJSON struct {
@@ -16,7 +22,19 @@ type LoginJSON struct {
 type RegisterJSON struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	Email string `json:"password" binding:"required"`
+	ConfirmPassword string `json:"confirmPassword" binding:"required"`
+	Email string `json:"email" binding:"required"`
+	InvitationCode string `json:"invitationCode" binding:"required"`
+}
+
+
+type UserProfileJson struct {
+	Name string `json:"name"`
+	Organization string `json:"organization" `
+	Description string `json:"description"`
+	Password string `json:"password" binding:"required"`
+	NewPassword string `json:"newPassword" `
+	ConfirmNewPassword string `json:"confirmNewPassword"`
 }
 
 func Login() gin.HandlerFunc {
@@ -49,6 +67,26 @@ func Register() gin.HandlerFunc {
 			c.JSON(400, gin.H{"msg": "Invalid Params!"})
 			return
 		}
+		if match,_:=regexp.MatchString("[\x21-\x7b]{8,16}",data.Username); match == false{
+			c.JSON(400, gin.H{"msg": "Username Invalid!"})
+			return
+		}
+		if match,_:=regexp.MatchString("[\x21-\x7b]{8,16}",data.Password); match == false{
+			c.JSON(400, gin.H{"msg": "Password Invalid!"})
+			return
+		}
+		if match,_:=regexp.MatchString("[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",data.Email); match == false{
+			c.JSON(400, gin.H{"msg": "Email Invalid!"})
+			return
+		}
+		if match,_:=regexp.MatchString("\\w{20}",data.InvitationCode); match == false{
+			c.JSON(400, gin.H{"msg": "InvatationCode Invalid!"})
+			return
+		}
+		if data.ConfirmPassword!=data.Password{
+			c.JSON(400, gin.H{"msg": "Passworld not match!"})
+			return
+		}
 		result := model.User{Username: data.Username}.Get()
 		if result != nil {
 			c.JSON(400, gin.H{"msg": "Username Exists!"})
@@ -64,12 +102,21 @@ func Register() gin.HandlerFunc {
 			c.JSON(400, gin.H{"msg": "Internal Error!"})
 			return
 		}
-		result = model.User{Username: data.Username, Password: encryptedPassword, Email:data.Email}, .Insert()
+		result = model.User{
+				Username: data.Username, 
+				Password: encryptedPassword, 
+				Email:data.Email,
+				Md5:fmt.Sprintf("%x", md5.Sum([]byte(data.Email))),
+				Nickname:"",
+				Description:"",
+				Organization:"",
+				Birth:time.Unix(time.Now().Unix(),0).Format("2020-03-11 11:22:33 AM"),
+		}.Insert()
 		c.JSON(200, gin.H{"msg": "Register Success!"})
 	}
 }
 
-func Profile() gin.HandlerFunc {
+func GetProfile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		loginuser := session.Get("loginuser")
@@ -78,10 +125,67 @@ func Profile() gin.HandlerFunc {
 			c.JSON(400, gin.H{"msg": "Internal Error"})
 			return
 		}
-		pass := model.User{Username: username}.Get().Password
+		Userdata := model.User{Username: username}.Get()
 		c.JSON(200,gin.H{
-			"Username":string(username),
-			"Password":pass,
+			"username":string(Userdata.Username),
+			"name":string(Userdata.Nickname),
+			"birth":string(Userdata.Birth),
+			"organization":string(Userdata.Organization),
+			"description":string(Userdata.Description),
+			"email":string(Userdata.Email),
+			"email_md5":string(Userdata.Md5),
+		},)
+	}
+}
+
+func ChangeProfile() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		loginuser := session.Get("loginuser")
+		username, ok := loginuser.(string)
+		if !ok {
+			c.JSON(400, gin.H{"msg": "Internal Error"})
+			return
+		}
+		var data UserProfileJson
+		if c.BindJSON(&data) != nil {
+			c.JSON(400, gin.H{"msg": "Invalid Params!"})
+			return
+		}
+
+		Userdata := model.User{Username: username}.Get()
+		
+		var newPassword string
+		if data.NewPassword != ""{
+			newPassword,_=lib.EncryptPassword(data.NewPassword)
+		} else{
+			newPassword = Userdata.Password
+		}
+
+		model.User{
+			Username: username,
+			Password: newPassword,
+			Email: Userdata.Email,
+			Md5: Userdata.Md5,
+			Nickname: data.Name,
+			Organization: data.Organization,
+			Birth: Userdata.Birth,
+			Description: data.Description,
+			}.Update()
+		c.JSON(200,gin.H{
+			"msg":"edit profile success",
+		},)
+	}
+}
+
+func GenToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		h := md5.New()
+		crutime := time.Now().Unix()
+		io.WriteString(h, strconv.FormatInt(crutime, 10))
+		token := fmt.Sprintf("%x", h.Sum(nil))
+		c.JSON(200,gin.H{
+			"token":string(token),
 		},)
 	}
 }
