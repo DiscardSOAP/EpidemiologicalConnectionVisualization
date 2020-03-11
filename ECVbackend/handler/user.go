@@ -16,6 +16,7 @@ type LoginJSON struct {
 type RegisterJSON struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	Email string `json:"password" binding:"required"`
 }
 
 func Login() gin.HandlerFunc {
@@ -50,15 +51,20 @@ func Register() gin.HandlerFunc {
 		}
 		result := model.User{Username: data.Username}.Get()
 		if result != nil {
-			c.JSON(400, gin.H{"msg": "Register Error!"})
+			c.JSON(400, gin.H{"msg": "Username Exists!"})
+			return
+		}
+		result2 := model.User{Email: data.Email}.Get()
+		if result2 != nil {
+			c.JSON(400, gin.H{"msg": "Email Exists!"})
 			return
 		}
 		encryptedPassword, err := lib.EncryptPassword(data.Password)
 		if err != nil || encryptedPassword == "" {
-			c.JSON(400, gin.H{"msg": "Register Error!"})
+			c.JSON(400, gin.H{"msg": "Internal Error!"})
 			return
 		}
-		result = model.User{Username: data.Username, Password: encryptedPassword}.Insert()
+		result = model.User{Username: data.Username, Password: encryptedPassword, Email:data.Email}, .Insert()
 		c.JSON(200, gin.H{"msg": "Register Success!"})
 	}
 }

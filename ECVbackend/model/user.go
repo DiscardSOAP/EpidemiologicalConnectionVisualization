@@ -3,6 +3,8 @@ import "log"
 type User struct {
 	Username string `xorm:"username"`
 	Password string `xorm:"password"`
+	Email string `xorm:"password"`
+	Md5 string `xorm:"password"`
 }
 
 func (u User) Get() *User {
