@@ -11,7 +11,7 @@ var dbEngine *xorm.Engine
 
 func init() {
 	var err error
-	dbEngine, _ = xorm.NewEngine("mysql", "user:123456@tcp(127.0.0.1:3306)/ecvsql?charset=utf8")
+	dbEngine, _ = xorm.NewEngine("mysql", "root:123456@/ecv_test?charset=utf8")
 	//dbEngine.ShowSQL = true
 	dbEngine.ShowSQL(true)
 	dbEngine.SetMaxIdleConns(5)

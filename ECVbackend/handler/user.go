@@ -193,6 +193,9 @@ func GenToken() gin.HandlerFunc {
 		log.Println(result)
 		if result != nil && lib.ComparePassword(data.Password, result.Password) {
 			if _, err := lib.GetToken(data.Username); err == nil {
+				session := sessions.Default(c)
+				session.Set("loginuser", data.Username)
+				session.Save()
 				h := md5.New()
 				crutime := time.Now().Unix()
 				io.WriteString(h, strconv.FormatInt(crutime, 10))
