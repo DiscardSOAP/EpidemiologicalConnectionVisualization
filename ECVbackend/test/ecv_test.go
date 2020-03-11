@@ -41,7 +41,7 @@ func PostJson(uri string, param map[string]interface{}, router *gin.Engine) []by
 }
 
 func TestRegister(t *testing.T){
-	router := setup.SetupRouter()
+	/*router := setup.SetupRouter()
 	uri := "/api/register/"
 	param := make(map[string]interface{})
 	param["username"] = "jkxing1234"
@@ -54,7 +54,7 @@ func TestRegister(t *testing.T){
 	json.Unmarshal(body, &response)
 	value, _ := response["msg"]
 	assert.Equal(t, "Register Success!", value)
-	return
+	return*/
 }
 func TestLogin(t *testing.T) {
 	
@@ -106,6 +106,22 @@ func TestLogin(t *testing.T) {
 	fmt.Println(response)
 	value, _ = response["msg"]
 	assert.Equal(t,"edit profile success",value)
+
+	
+    req = httptest.NewRequest("GET", "/api/token/", bytes.NewReader(jsonByte))
+	w = httptest.NewRecorder()
+	for k := range cookies{
+		http.SetCookie(w, cookies[k])
+		req.AddCookie(cookies[k])
+		fmt.Println(cookies[k].Name)
+	}
+	router.ServeHTTP(w, req)
+	result = w.Result()
+    body, _ = ioutil.ReadAll(result.Body)
+	json.Unmarshal(body, &response)
+	fmt.Println("fdsfasjkhhhhhhhhhhhhhhhhhhhhhhhh")
+	fmt.Println(response["token"])
+	fmt.Println("fdsfasjkhhhhhhhhhhhhhhhhhhhhhhhh")
 }
 
 func TestHelloWorld(t *testing.T){

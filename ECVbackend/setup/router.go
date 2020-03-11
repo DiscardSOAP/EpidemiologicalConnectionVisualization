@@ -20,7 +20,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/api/register/", handler.Register())
 	router.POST("/api/login/", handler.Login())
 	
-	router.POST("/api/token/",middleware.CookieAuthMiddleware(),handler.GenToken())
+	router.GET("/api/token/",middleware.CookieAuthMiddleware(),handler.GenToken())
 	router.GET("/api/profile/", middleware.CookieAuthMiddleware(), handler.GetProfile())
 	router.POST("/api/profile/", middleware.CookieAuthMiddleware(), handler.ChangeProfile())
 	
