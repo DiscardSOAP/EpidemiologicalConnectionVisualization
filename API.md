@@ -4,7 +4,7 @@
 
 ## 用户系统
 
-### api/token/
+### api/login/
 
 POST
 
