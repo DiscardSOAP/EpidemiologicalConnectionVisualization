@@ -59,7 +59,7 @@ export default {
           },
           logout: false,
           user: {
-            url: "/api/user/profile/",
+            url: "/api/profile/",
             method: "get"
           }
         }

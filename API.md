@@ -86,6 +86,7 @@ POST
 
 - ```json
     {
+        user:{
             name: '', # 昵称
             organization: '', #所属组织
             description: '', #自述
@@ -93,8 +94,9 @@ POST
             newPassword: '',
             confirmNewPassword: '',
         }
+}
     ```
-
+    
 - 200 : 
 
     ```json
