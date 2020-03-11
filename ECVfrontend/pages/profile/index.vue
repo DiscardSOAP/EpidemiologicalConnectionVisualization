@@ -16,7 +16,7 @@
           class="mx-auto my-4"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-img src="https://bkimg.cdn.bcebos.com/pic/377adab44aed2e736d5390c38001a18b86d6faa3?x-bce-process=image/resize,m_lfit,w_268,limit_1">
+            <v-img src="https://img-blog.csdn.net/20140702104508726">
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -54,7 +54,8 @@
             <v-btn
               color="deep-purple lighten-2"
               text
-              @click="$router.push({path:'/profile/edit/'})"
+              @click="$router.push({path:'https://en.gravatar.com/'})"
+              target="_blank"
             >
               Edit
             </v-btn>
@@ -77,13 +78,13 @@ export default {
   data: function () {
     return {
       user: {
-        username: "fnoi2014xtx",
-        name: "徐天行",
-        birth: "1999-2-14",
-        organization: "天津",
-        description: "得到覅大哥法国i噶放工返工的撒哥",
-        email: "slothfulxtx@google.com",
-        email_md5: "fdafdfafdgwegrgwerg",
+        username: "",
+        name: "",
+        birth: "",
+        organization: "",
+        description: "",
+        email: "",
+        email_md5: "",
         loading: true,
         error: false,
         ok: false,
@@ -91,7 +92,7 @@ export default {
 
     }
   },
-  /*asyncData (context) {
+  asyncData (context) {
     return context.app.$axios.get('/api/profile/').then(
       res => {
         let data = res.data
@@ -104,6 +105,6 @@ export default {
       }
     )
 
-  },*/
+  },
 }
 </script>
