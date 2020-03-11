@@ -110,9 +110,13 @@ func Register() gin.HandlerFunc {
 				Nickname:"",
 				Description:"",
 				Organization:"",
-				Birth:time.Unix(time.Now().Unix(),0).Format("2020-03-11 11:22:33 AM"),
+				Birth:time.Now().Format("2006-01-02 15:04:05"),
 		}.Insert()
-		c.JSON(200, gin.H{"msg": "Register Success!"})
+		if result!=nil{
+			c.JSON(200, gin.H{"msg": "Register Success!"})
+		}else{
+			c.JSON(200, gin.H{"msg": "internal error!"})
+		}
 	}
 }
 

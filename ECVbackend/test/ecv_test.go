@@ -41,7 +41,7 @@ func PostJson(uri string, param map[string]interface{}, router *gin.Engine) []by
 }
 
 func TestRegister(t *testing.T){
-	/*router := setup.SetupRouter()
+	router := setup.SetupRouter()
 	uri := "/api/register/"
 	param := make(map[string]interface{})
 	param["username"] = "jkxing1234"
@@ -54,7 +54,7 @@ func TestRegister(t *testing.T){
 	json.Unmarshal(body, &response)
 	value, _ := response["msg"]
 	assert.Equal(t, "Register Success!", value)
-	return*/
+	return
 }
 func TestLogin(t *testing.T) {
 	
