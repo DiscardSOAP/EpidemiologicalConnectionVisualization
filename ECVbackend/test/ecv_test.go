@@ -40,10 +40,9 @@ func PostJson(uri string, param map[string]interface{}, router *gin.Engine) []by
     return body
 }
 
-func TestRegisterLogin(t *testing.T) {
-	
-	router := setup.SetupRouter()
-	/*uri := "/api/register/"
+func TestRegister(t *testing.T){
+	/*router := setup.SetupRouter()
+	uri := "/api/register/"
 	param := make(map[string]interface{})
 	param["username"] = "jkxing1234"
 	param["password"] = "123456"
@@ -53,23 +52,23 @@ func TestRegisterLogin(t *testing.T) {
 	value, _ := response["msg"]
 	assert.Equal(t, "Register Success!", value)
 	return*/
+}
+func TestRegisterLogin(t *testing.T) {
+	
+	router := setup.SetupRouter()
 	uri := "/api/login/"
 	param := make(map[string]interface{})
 	param["username"] = "jkxing123"
 	param["password"] = "123456"
-
 	jsonByte,_ := json.Marshal(param)
-	
     req := httptest.NewRequest("POST", uri, bytes.NewReader(jsonByte))
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
     result := w.Result()
     defer result.Body.Close()
-	//login_body, _ := ioutil.ReadAll(result.Body)
 	cookies := result.Cookies()
 	uri = "/api/user/profile/"
 	w = httptest.NewRecorder()
-	//request := &http.Request{Header: http.Header{"Cookie": recorder.HeaderMap["Set-Cookie"]}}
     req = httptest.NewRequest("GET", uri, nil)
 	for k := range cookies{
 		http.SetCookie(w, cookies[k])
@@ -78,10 +77,6 @@ func TestRegisterLogin(t *testing.T) {
 	}
 	router.ServeHTTP(w, req)
 	result = w.Result()
-	cookies = result.Cookies()
-	for k := range cookies{
-		fmt.Println(cookies[k])
-	}
 	var response map[string]string
     body, _ := ioutil.ReadAll(result.Body)
 	json.Unmarshal(body, &response)

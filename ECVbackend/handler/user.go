@@ -28,14 +28,12 @@ func Login() gin.HandlerFunc {
 		result := model.User{Username: data.Username}.Get()
 		log.Println(result)
 		if result != nil && lib.ComparePassword(data.Password, result.Password) {
-			if tokenString, err := lib.GetToken(data.Username); err == nil {
-				//c.SetCookie("sessionID","1",60,"/","127.0.0.1",false,true)
-				//c.SetCookie("name", "Shimin Li", -1, "/", "localhost", false, true)
-				//log.Println("*********************************")
+			if _, err := lib.GetToken(data.Username); err == nil {
 				session := sessions.Default(c)
 				session.Set("loginuser", data.Username)
 				session.Save()
-				c.JSON(200, gin.H{"token": tokenString})
+				//c.Request.URL.Path = "/api/helloworld"
+				c.JSON(200, gin.H{})
 				return
 			}
 		}

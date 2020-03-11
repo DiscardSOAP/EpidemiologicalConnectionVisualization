@@ -22,10 +22,4 @@ func init() {
 		log.Println("ping sql ok")
 	}
 	dbEngine.CreateTables(&User{})
-	_, err = dbEngine.Insert(&User{Username:"jkxing",Password:"123456"})
-	if err!=nil{
-		log.Println(err)
-	}else{
-		log.Println("init sql ok")
-	}
 }
