@@ -130,14 +130,14 @@ func GetProfile() gin.HandlerFunc {
 			return
 		}
 		Userdata := model.User{Username: username}.Get()
-		c.JSON(200,gin.H{
+		c.JSON(200,gin.H{"user":gin.H{
 			"username":string(Userdata.Username),
 			"name":string(Userdata.Nickname),
 			"birth":string(Userdata.Birth),
 			"organization":string(Userdata.Organization),
 			"description":string(Userdata.Description),
 			"email":string(Userdata.Email),
-			"email_md5":string(Userdata.Md5),
+			"email_md5":string(Userdata.Md5),},
 		},)
 	}
 }
@@ -184,12 +184,25 @@ func ChangeProfile() gin.HandlerFunc {
 
 func GenToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		h := md5.New()
-		crutime := time.Now().Unix()
-		io.WriteString(h, strconv.FormatInt(crutime, 10))
-		token := fmt.Sprintf("%x", h.Sum(nil))
-		c.JSON(200,gin.H{
-			"token":string(token),
-		},)
+		var data LoginJSON
+		if c.BindJSON(&data) != nil {
+			c.JSON(400, gin.H{"msg": "Invalid Params!"})
+			return
+		}
+		result := model.User{Username: data.Username}.Get()
+		log.Println(result)
+		if result != nil && lib.ComparePassword(data.Password, result.Password) {
+			if _, err := lib.GetToken(data.Username); err == nil {
+				h := md5.New()
+				crutime := time.Now().Unix()
+				io.WriteString(h, strconv.FormatInt(crutime, 10))
+				token := fmt.Sprintf("%x", h.Sum(nil))
+				c.JSON(200,gin.H{
+					"token":string(token),
+				},)
+				return
+			}
+		}
+		c.JSON(400, gin.H{"msg": "Get token Error!"})
 	}
 }

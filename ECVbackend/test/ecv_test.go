@@ -56,6 +56,17 @@ func TestRegister(t *testing.T){
 	assert.Equal(t, "Register Success!", value)
 	return*/
 }
+
+
+type UserProfileJson1 struct {
+	Username string `json:"username"`
+	Name string `json:"name"`
+	Birth string `json:"birth"`
+	Organization string `json:"organization" `
+	Description string `json:"description"`
+	Email string `json:"email" binding:"required"`
+	Md5 string `json:"email_md5" `
+}
 func TestLogin(t *testing.T) {
 	
 	router := setup.SetupRouter()
@@ -80,12 +91,15 @@ func TestLogin(t *testing.T) {
 	}
 	router.ServeHTTP(w, req)
 	result = w.Result()
-	var response map[string]string
+	var response1 map[string]UserProfileJson1
+	//var response map[string]string
     body, _ := ioutil.ReadAll(result.Body)
-	json.Unmarshal(body, &response)
-	fmt.Println(response)
-	value, _ := response["username"]
-	assert.Equal(t,"jkxing1234",value)
+	json.Unmarshal(body, &response1)
+	fmt.Println(response1["user"])
+	fmt.Print("1231231231232131312312311111111111\n")
+	fmt.Print("123123123123213131231231111111111122222222222222")
+	//value, _ := response["username"]
+	//assert.Equal(t,"jkxing1234",value)
 	
 	param = make(map[string]interface{})
 	param["name"] = "skylines"
@@ -101,20 +115,20 @@ func TestLogin(t *testing.T) {
 	}
 	router.ServeHTTP(w, req)
 	result = w.Result()
-    body, _ = ioutil.ReadAll(result.Body)
+	body, _ = ioutil.ReadAll(result.Body)
+	var response map[string]string
 	json.Unmarshal(body, &response)
 	fmt.Println(response)
-	value, _ = response["msg"]
+	value, _ := response["msg"]
 	assert.Equal(t,"edit profile success",value)
 
 	
-    req = httptest.NewRequest("GET", "/api/token/", bytes.NewReader(jsonByte))
+	param = make(map[string]interface{})
+	param["username"] = "jkxing1234"
+	param["password"] = "12345678"
+	jsonByte,_ = json.Marshal(param)
+    req = httptest.NewRequest("POST", "/api/token/", bytes.NewReader(jsonByte))
 	w = httptest.NewRecorder()
-	for k := range cookies{
-		http.SetCookie(w, cookies[k])
-		req.AddCookie(cookies[k])
-		fmt.Println(cookies[k].Name)
-	}
 	router.ServeHTTP(w, req)
 	result = w.Result()
     body, _ = ioutil.ReadAll(result.Body)
