@@ -134,6 +134,7 @@ export default {
         ],
         emailRules: [
           v => !!v || 'E-mail is required',
+          v => (v && v.length <= 50) || 'Email must be less than 20 characters',
           v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
         passwordRules: [
