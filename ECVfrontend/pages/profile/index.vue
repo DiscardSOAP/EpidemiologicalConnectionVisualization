@@ -16,20 +16,22 @@
           class="mx-auto my-4"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-img src="https://img-blog.csdn.net/20140702104508726">
+            <v-img src="https://www.baidu.com/img/bd_logo1.png">
               <v-expand-transition>
                 <div
                   v-if="hover"
                   class="d-flex transition-fast-in-fast-out black darken-2 v-card--reveal"
                   style="height: 100%;opacity:0.8;"
                 >
-                  <v-btn
+                  <a
+                    is='v-btn'
                     color="primary"
                     style="position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-                    @click="$router.push({path:'/profile/edit/'})"
+                    href="https://en.gravatar.com/"
+                    target="_blank"
                   >
-                    Edit
-                  </v-btn>
+                    Edit Image
+                  </a>
                 </div>
               </v-expand-transition>
             </v-img>
@@ -54,8 +56,7 @@
             <v-btn
               color="deep-purple lighten-2"
               text
-              @click="$router.push({path:'https://en.gravatar.com/'})"
-              target="_blank"
+              @click="$router.push({path:'/profile/edit/'})"
             >
               Edit
             </v-btn>
