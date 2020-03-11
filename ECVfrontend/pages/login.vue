@@ -142,6 +142,7 @@ export default {
         .then(() => {
           this.loginForm.error = false
           this.loginForm.ok = true
+          this.$router.push({ path: '/profile/' })
         })
         .catch(err => {
           this.loginForm.error = true
