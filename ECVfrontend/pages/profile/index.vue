@@ -12,11 +12,11 @@
         md="4"
       >
         <v-card
-          :loading="loading"
+          :loading="user.loading"
           class="mx-auto my-4"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
+            <v-img src="https://bkimg.cdn.bcebos.com/pic/377adab44aed2e736d5390c38001a18b86d6faa3?x-bce-process=image/resize,m_lfit,w_268,limit_1">
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -26,51 +26,37 @@
                   <v-btn
                     color="primary"
                     style="position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-                    @click="reserve"
+                    @click="$router.push({path:'/profile/edit/'})"
                   >
-                    Reserve
+                    Edit
                   </v-btn>
                 </div>
               </v-expand-transition>
             </v-img>
           </v-hover>
-          <v-card-title>Cafe Badilico</v-card-title>
-          <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
+          <v-card-title>{{user.name}}</v-card-title>
+          <v-card-subtitle class="pb-0">{{user.username}}</v-card-subtitle>
           <v-card-text>
             <div class="my-1 subtitle-1">
-              $ • Italian, Cafe
+              • {{user.organization}}
             </div>
 
-            <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+            <div>{{user.description}}</div>
           </v-card-text>
 
           <v-divider class="mx-4"></v-divider>
 
-          <v-card-title>Tonight's availability</v-card-title>
-
           <v-card-text>
-            <v-chip-group
-              v-model="selection"
-              active-class="deep-purple accent-4 white--text"
-              column
-            >
-              <v-chip>5:30PM</v-chip>
-
-              <v-chip>7:30PM</v-chip>
-
-              <v-chip>8:00PM</v-chip>
-
-              <v-chip>9:00PM</v-chip>
-            </v-chip-group>
+            {{user.email}}
           </v-card-text>
 
           <v-card-actions>
             <v-btn
               color="deep-purple lighten-2"
               text
-              @click="reserve"
+              @click="$router.push({path:'/profile/edit/'})"
             >
-              Reserve
+              Edit
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -90,7 +76,34 @@ export default {
   },
   data: function () {
     return {
+      user: {
+        username: "fnoi2014xtx",
+        name: "徐天行",
+        birth: "1999-2-14",
+        organization: "天津",
+        description: "得到覅大哥法国i噶放工返工的撒哥",
+        email: "slothfulxtx@google.com",
+        email_md5: "fdafdfafdgwegrgwerg",
+        loading: true,
+        error: false,
+        ok: false,
+      },
+
     }
   },
+  /*asyncData (context) {
+    return context.app.$axios.get('/api/profile/').then(
+      res => {
+        let data = res.data
+        data.user.loading = false
+        data.user.ok = true
+        return data
+      },
+      () => {
+        context.error({ statusCode: 401, message: "You do not have the proper privilege level!" })
+      }
+    )
+
+  },*/
 }
 </script>
