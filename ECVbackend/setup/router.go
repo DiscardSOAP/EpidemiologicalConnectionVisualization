@@ -3,26 +3,20 @@ package setup
 import (
 	"github.com/gin-gonic/gin"
 
-	"ecvbackend/handler"
+	"ecvbackend/api"
 	"ecvbackend/middleware"
-
-	"github.com/gin-contrib/sessions"
-
-	"github.com/gin-contrib/sessions/cookie"
+	"ecvbackend/pkg/util"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	store := cookie.NewStore([]byte("loginuser"))
+    router.Use(util.EnableCookieSession())
 	router.Use(middleware.CORSMiddleware())
-	router.Use(sessions.Sessions("Sessions", store))
-	router.GET("/api/helloworld/", handler.HelloToGuest())
-	router.POST("/api/register/", handler.Register())
-	router.POST("/api/login/", handler.Login())
-	
-	router.POST("/api/token/",handler.GenToken())
-	router.GET("/api/profile/", middleware.CookieAuthMiddleware(), handler.GetProfile())
-	router.POST("/api/profile/", middleware.CookieAuthMiddleware(), handler.ChangeProfile())
-	
+	router.GET("/api/helloworld/", api.HelloToGuest())
+	router.POST("/api/register/", api.Register())
+	router.POST("/api/login/", api.Login())
+	router.POST("/api/auth/",api.GetAuth)
+	router.GET("/api/profile/", middleware.CookieAuth(),middleware.JWT(),api.GetProfile())
+	router.POST("/api/profile/", middleware.CookieAuth(),middleware.JWT(), api.ChangeProfile())
 	return router
 }
