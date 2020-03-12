@@ -44,20 +44,6 @@ func Post(uri string, param map[string]interface{}) *http.Response{
 	return result
 }
 
-func GetWithCookies(uri string, cookies []*http.Cookie,token string) *http.Response{
-	req := httptest.NewRequest("GET", uri, nil)
-    req.Header.Add("token", token)
-	w := httptest.NewRecorder()
-	for k := range cookies{
-		http.SetCookie(w, cookies[k])
-		req.AddCookie(cookies[k])
-		fmt.Println(cookies[k].Name)
-	}
-    router.ServeHTTP(w, req)
-	result := w.Result()
-	return result
-}
-
 func ReqWithCookies(method string, uri string, param map[string]interface{}, cookies []*http.Cookie,token string) *http.Response{
 	jsonByte,_ := json.Marshal(param)
 	req := httptest.NewRequest(method, uri, bytes.NewReader(jsonByte))
@@ -85,7 +71,7 @@ func TestLogin(t *testing.T) {
 	res=Post("/api/auth/",param)
 	body,_ = ioutil.ReadAll(res.Body)
 	json.Unmarshal(body, &response)
-	token:=response["data"].(map[string]interface{})["token"].(string)
+	token:=response["token"].(string)
 	res = ReqWithCookies("GET","/api/profile/",nil,cookies,token)
     body, _ = ioutil.ReadAll(res.Body)
 	json.Unmarshal(body, &response)
