@@ -68,8 +68,6 @@ func TestLogin(t *testing.T) {
 	body,_ := ioutil.ReadAll(res.Body)
 	json.Unmarshal(body, &response)
 	cookies := res.Cookies()
-	res=Post("/api/auth/",param)
-	body,_ = ioutil.ReadAll(res.Body)
 	json.Unmarshal(body, &response)
 	token:=response["token"].(string)
 	res = ReqWithCookies("GET","/api/profile/",nil,cookies,token)

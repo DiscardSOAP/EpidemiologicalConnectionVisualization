@@ -49,7 +49,8 @@ func Login() gin.HandlerFunc {
 		result := model.User{Username: data.Username}.Get()
 		if result != nil && util.ComparePassword(data.Password, result.Password) {
 			util.SaveAuthSession(c,data.Username)
-			c.JSON(200, gin.H{})
+            token, _ := util.GenerateToken(data.Username, data.Password)
+			c.JSON(200, gin.H{"token":token})
 			return
 		}
 		c.JSON(400, gin.H{"msg": "Login Error!"})
