@@ -5,7 +5,7 @@ import (
     "net/http"
     "log"
     "github.com/gin-gonic/gin"
-
+    "strings"
     "ecvbackend/pkg/util"
     "ecvbackend/pkg/e"
 )
@@ -17,6 +17,17 @@ func JWT() gin.HandlerFunc {
 
         code = e.SUCCESS
         token := c.Request.Header.Get("Authorization")
+        /*var header string, token string
+        if len(tokens)==2{
+            header = tokens[0]
+            token =  tokens[1]
+            if(header!="Bearer"){
+                log.Println("token invalid")
+                code = e.INVALID_PARAMS
+            }
+        }else{
+            token = tokens[0]
+        }*/
         if token == "" {
             log.Println("token invalid")
             code = e.INVALID_PARAMS
@@ -27,6 +38,7 @@ func JWT() gin.HandlerFunc {
             } else if time.Now().Unix() > claims.ExpiresAt {
                 code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
             }
+            c.Set("username", claims.Username)
         }
 
         if code != e.SUCCESS {
@@ -39,7 +51,6 @@ func JWT() gin.HandlerFunc {
             c.Abort()
             return
         }
-
         c.Next()
     }
 }
