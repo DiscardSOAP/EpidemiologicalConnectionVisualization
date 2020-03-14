@@ -16,7 +16,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/api/register/", api.Register())
 	router.POST("/api/login/", api.Login())
 	router.POST("/api/auth/",api.GetAuth)
-	router.GET("/api/profile/", middleware.CookieAuth(),middleware.JWT(),api.GetProfile())
-	router.POST("/api/profile/", middleware.CookieAuth(),middleware.JWT(), api.ChangeProfile())
+	router.GET("/api/profile/", middleware.JWT(),api.GetProfile())
+	router.POST("/api/profile/", middleware.JWT(), api.ChangeProfile())
 	return router
 }
