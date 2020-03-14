@@ -26,8 +26,6 @@
         <blockquote class="blockquote"><span>&copy; {{ new Date().getFullYear() }}</span> </blockquote>
 
       </template>
-
-      <!--span>&copy; {{ new Date().getFullYear() }} All rights reserved.</span-->
     </v-navigation-drawer>
     <v-app-bar
       :clipped-left="true"

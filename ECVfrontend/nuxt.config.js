@@ -60,9 +60,11 @@ export default {
           logout: false,
           user: {
             url: "/api/profile/",
-            method: "get"
+            method: "get",
+            propertyName: "user"
           }
-        }
+        },
+        tokenType: '',
       }
     }
   },

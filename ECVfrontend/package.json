@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.8.5",
-    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/axios": "^5.9.5",
     "d3": "^5.15.0",
     "dat.gui": "^0.7.6",
     "material-icons": "^0.3.1",
