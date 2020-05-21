@@ -321,11 +321,13 @@ export default {
             normal: {
               show: true, // 是否显示对应地名
               textStyle: {
-                color: 'rgba(127,127,127)'
+                color: 'rgba(127,127,127)',
+                fontSize: 14
               }
             },
             emphasis: {
-              color: 'rgba(0,0,0,0)'
+              color: '#F66',
+              fontSize: 20
             }
           },
           itemStyle: {
