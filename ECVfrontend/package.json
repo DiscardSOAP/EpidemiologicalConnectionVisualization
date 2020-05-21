@@ -1,0 +1,49 @@
+{
+  "name": "ecv",
+  "version": "1.0.0",
+  "description": "Epidemiological Connection Visualization",
+  "author": "slothfulxtx",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": 3000
+    }
+  },
+  "dependencies": {
+    "@nuxtjs/auth": "^4.8.5",
+    "@nuxtjs/axios": "^5.9.5",
+    "amap": "^1.0.7",
+    "dat.gui": "^0.7.6",
+    "echarts": "^4.7.0",
+    "fs": "0.0.1-security",
+    "markdown-it": "^10.0.0",
+    "material-icons": "^0.3.1",
+    "mavon-editor": "^2.7.7",
+    "moment": "^2.24.0",
+    "nuxt": "^2.0.0",
+    "three": "^0.114.0",
+    "three-css2drender": "^1.0.0",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbit-controls": "^82.1.0",
+    "tween.js": "^16.6.0",
+    "vis": "^4.21.0-EOL",
+    "vis-data": "^6.5.0",
+    "vis-network": "^7.4.0",
+    "vis-util": "^4.0.0",
+    "vue-amap": "^0.5.10",
+    "vue-vis-network": "^1.0.2",
+    "vuelidate": "^0.7.5",
+    "vuetify": "^2.2.15"
+  },
+  "devDependencies": {
+    "@mdi/font": "^4.9.95",
+    "@nuxtjs/vuetify": "^1.0.0"
+  }
+}
