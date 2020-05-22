@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"github.com/gin-gonic/gin"
 	"time"
-	"fmt"
+	"strings"
 	"sort"
 )
 func GetTrend() gin.HandlerFunc{
@@ -35,15 +35,14 @@ func GetTrend() gin.HandlerFunc{
 					st = ans[i].Events[j].StartDate
 				}
 			}
-			st = st[5:10]
-			ed = ed[5:10]
+			st = strings.Replace(st[5:10],"-","/",-1)
+			ed = strings.Replace(ed[5:10],"-","/",-1)
 			pre := ds[st]
 			pre.Open = pre.Open+1 
 			ds[st] = pre
 			pre = ds[ed]
 			pre.Close = pre.Close+1 
 			ds[ed] = pre
-			fmt.Println(st," ",ed)
 		}
 		tmp1:=0
 		tmp2:=0
