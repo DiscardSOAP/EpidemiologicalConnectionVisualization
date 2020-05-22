@@ -93,7 +93,8 @@ export default {
         '香港': 'xianggang',
         '台湾': 'taiwan',
         '上海': 'shanghai',
-        '南海诸岛': 'nanhaizhudao'
+        '南海诸岛': 'nanhaizhudao',
+        '海南': 'hainan'
       }
 
       console.log(this.data)

@@ -103,6 +103,7 @@ const nameMap = {
   'taiwan': '台湾',
   'shanghai': '上海',
   'nanhaizhudao': '南海诸岛',
+  'hainan': '海南'
 }
 
 export default {
@@ -147,6 +148,7 @@ export default {
         'taiwan': '台湾',
         'shanghai': '上海',
         'nanhaizhudao': '南海诸岛',
+        'hainan': '海南'
       },
       sheet: {
         open: false,

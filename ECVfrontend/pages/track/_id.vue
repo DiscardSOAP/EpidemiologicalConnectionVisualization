@@ -119,6 +119,7 @@ const nameMap = {
   'taiwan': '台湾',
   'shanghai': '上海',
   'nanhaizhudao': '南海诸岛',
+  'hainan': '海南'
 }
 
 
@@ -129,6 +130,7 @@ export default {
     return {
       nameMap: {
         'tianjin': '天津',
+        'hainan': '海南',
         'beijing': '北京',
         'guangdong': '广东',
         'xinjiang': '新疆',

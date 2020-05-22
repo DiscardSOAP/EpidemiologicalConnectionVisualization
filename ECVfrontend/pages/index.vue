@@ -13,22 +13,39 @@
 <script>
 import echarts from "echarts"
 import '../node_modules/echarts/map/js/china.js'
+import moment from "moment"
 export default {
   auth: false,
   data () {
     return {
       chart: null,
       chart2: null,
-      data2: {},
       data: {},
-      maxNum: 0,
-      minNum: 0,
+      xAxis: [],
+      yAxis1: [],
+      yAxis2: [],
       category: '',
+      startDate: ''
     }
   },
   mounted () {
-    this.chinaConfigure()
-    this.chartConfigure()
+    this.$axios.post(`api/trend/`, {
+      category: this.category,
+    }).then(
+      res => {
+        this.startDate = res.data.date.length > 0 ? res.data.date[0] : '2020/01/01'
+        let data = this.preprocess(res.data)
+        this.xAxis = data.xAxis
+        this.yAxis1 = data.yAxis1
+        this.yAxis2 = data.yAxis2
+        this.chinaConfigure()
+        this.chartConfigure()
+
+      },
+      () => {
+
+      }
+    )
   },
   asyncData (context) {
     return context.app.$axios
@@ -37,16 +54,9 @@ export default {
         res => {
           let data = res.data
           console.log(res.data)
-          let maxNum = 0
-          for (let city in data) {
-            maxNum = Math.max(maxNum, data[city])
-          }
-          if (maxNum == 0)
-            maxNum = 1
           //console.log(users)
           return {
             data: data,
-            maxNum: maxNum,
           }
         },
         () => {
@@ -66,19 +76,78 @@ export default {
     }
   },
   methods: {
+    refresh () {
+      this.$axios.post(`api/trend/`, {
+        category: this.category,
+      }).then(
+        res => {
+          let data = this.preprocess(res.data)
+          this.xAxis = data.xAxis
+          this.yAxis1 = data.yAxis1
+          this.yAxis2 = data.yAxis2
+          this.chartConfigure()
+        },
+        () => {
+
+        }
+      )
+    },
+    preprocess (data) {
+      if (data.date.length == 0)
+        return {
+          xAxis: [],
+          yAxis1: [],
+          yAxis2: []
+        }
+      let lib1 = {}
+      let lib2 = {}
+      for (let i = 0; i < data.date.length; i++) {
+        lib1[data.date[i]] = data.active[i]
+        lib2[data.date[i]] = data.locked[i]
+      }
+      console.log(lib1)
+      console.log(lib2)
+      let startDate = moment(this.startDate)
+      let endDate = moment()
+      let xAxis = []
+      let yAxis1 = []
+      let yAxis2 = []
+      let last1 = data.active[0], last2 = data.locked[0]
+      let date = moment(this.startDate)
+      for (; ;) {
+        console.log(date.format('YYYY/MM/DD'), lib1[date.format('YYYY/MM/DD')])
+        if (lib1[date.format('YYYY/MM/DD')] != undefined) {
+          last1 = lib1[date.format('YYYY/MM/DD')]
+        }
+        if (lib2[date.format('YYYY/MM/DD')] != undefined) {
+          last2 = lib2[date.format('YYYY/MM/DD')]
+        }
+        xAxis.push(date.format('MM-DD'))
+        yAxis1.push(last1)
+        yAxis2.push(last2)
+        date.add(1, 'days')
+        if (date.format('YYYY-MM-DD') == endDate.format('YYYY-MM-DD'))
+          break
+      }
+      return {
+        xAxis: xAxis,
+        yAxis1: yAxis1,
+        yAxis2: yAxis2,
+      }
+    },
     chartConfigure () {
       if (this.chart2) {
         this.chart2.dispose()
         this.chart2 = null
       }
-      var xAxisData = []
+      /*var xAxisData = []
       var activeNumbers = []
       var lockedNumbers = []
       for (var i = 0; i < 100; i++) {
         xAxisData.push('' + i);
         activeNumbers.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
         lockedNumbers.push((Math.sin(i / 5) * (i / 5 - 10) + i / 3) * 2);
-      }
+      }*/
       let option = {
         title: {
           text: this.category ? this.category : '全国' + '病例变化',
@@ -127,7 +196,7 @@ export default {
               color: "white"
             },
             type: 'category',
-            data: xAxisData,
+            data: this.xAxis,
             axisLabel: {
               color: "white"
             }
@@ -141,12 +210,6 @@ export default {
               color: "white"
             },
             axisLabel: {
-              formatter: function (a) {
-                a = +a;
-                return isFinite(a)
-                  ? echarts.format.addCommas(+a / 1000)
-                  : '';
-              },
               color: "white"
             }
           }
@@ -154,12 +217,12 @@ export default {
         dataZoom: [
           {
             show: true,
-            start: 94,
+            start: 90,
             end: 100
           },
           {
             type: 'inside',
-            start: 94,
+            start: 90,
             end: 100
           },
           {
@@ -177,15 +240,14 @@ export default {
             name: '隔离病例',
             type: 'bar',
             stack: '感染病例',
-            data: lockedNumbers
+            data: this.yAxis2
           },
           {
             name: '游荡病例',
             type: 'bar',
             stack: '感染病例',
-            data: activeNumbers
+            data: this.yAxis1
           },
-
         ]
       };
       this.chart2 = echarts.init(this.$refs.myEchart2)
@@ -239,10 +301,6 @@ export default {
           "value": this.data[city],
         })
       }
-      data.push({
-        "name": "贵州",
-        "value": 100,
-      })
       console.log(data)
       this.chart = echarts.init(this.$refs.myEchart) //这里是为了获得容器所在位置    
       window.onresize = this.chart.resize
@@ -353,7 +411,7 @@ export default {
             coordinateSystem: 'geo',
             data: convertData(data),
             symbolSize: function (val) {
-              return val[2] / 10;
+              return val[2] / 5;
             },
             encode: {
               value: 2
@@ -380,7 +438,7 @@ export default {
               return b.value - a.value;
             }).slice(0, 6)),
             symbolSize: function (val) {
-              return val[2] / 10;
+              return val[2] / 5;
             },
             encode: {
               value: 2
@@ -402,7 +460,7 @@ export default {
       var _this = this;
       this.chart.on('click', function (params) {
         _this.category = params.name
-        _this.chartConfigure()
+        _this.refresh()
       });
     }
   }
