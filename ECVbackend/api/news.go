@@ -25,15 +25,24 @@ func GetTrend() gin.HandlerFunc{
 		}
 		ds := make(map[string]Trend,0)
 		for i:=0;i<len(ans);i++{
-			ed := ans[i].PublishTime
-			st := ans[i].PublishTime
+			ed := ""
+			st := ""
 			for j:=0;j<len(ans[i].Events);j++{
-				if len(ans[i].Events[j].EndDate)>10&&ans[i].Events[j].EndDate>ed{
+				if len(ed)==0 || (len(ans[i].Events[j].EndDate)>=10&&ans[i].Events[j].EndDate>ed){
 					ed = ans[i].Events[j].EndDate
 				}
-				if len(ans[i].Events[j].StartDate)>10&&ans[i].Events[j].StartDate<st{
+				if len(st)==0 || (len(ans[i].Events[j].StartDate)>=10&&ans[i].Events[j].StartDate<st){
 					st = ans[i].Events[j].StartDate
 				}
+			}
+			if st==""{
+				st = ans[i].PublishTime
+			}
+			if ed==""{
+				ed = ans[i].PublishTime
+			}
+			if len(st)<10 || len(ed)<10{
+				continue
 			}
 			st = strings.Replace(st[0:10],"-","/",-1)
 			ed = strings.Replace(ed[0:10],"-","/",-1)
