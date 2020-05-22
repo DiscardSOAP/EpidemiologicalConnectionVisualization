@@ -99,9 +99,21 @@ func TestGetTopo(t *testing.T){
 }
 
 func TestGetTrack(t *testing.T){
+	return
 	param := make(map[string]interface{})
 	param["category"] = "tianjin"
 	res1:=ReqWithCookies("POST","/api/track/",param,nil,"")
+	var response44 map[string]interface{}
+	body,_ := ioutil.ReadAll(res1.Body)
+	json.Unmarshal(body, &response44)
+	fmt.Println("=============")
+	fmt.Println(response44)
+}
+
+func TestGetTrend(t *testing.T){
+	param := make(map[string]interface{})
+	param["category"] = "tianjin"
+	res1:=ReqWithCookies("POST","/api/trend/",param,nil,"")
 	var response44 map[string]interface{}
 	body,_ := ioutil.ReadAll(res1.Body)
 	json.Unmarshal(body, &response44)

@@ -6,7 +6,69 @@ import (
 	"strconv"
 	"github.com/gin-gonic/gin"
 	"time"
+	"fmt"
+	"sort"
 )
+func GetTrend() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		var data struct{
+			Category string `json:"category"`;
+		}
+		if c.BindJSON(&data) != nil {
+			c.JSON(400, gin.H{"msg": "Invalid Params!"})
+			return
+		}
+		ans := model.FindTrend(data.Category)
+		type Trend struct {
+			Open int
+			Close int
+		}
+		ds := make(map[string]Trend,0)
+		for i:=0;i<len(ans);i++{
+			ed := ans[i].PublishTime
+			st := ans[i].PublishTime
+			for j:=0;j<len(ans[i].Events);j++{
+				if ans[i].Events[j].EndDate>ed{
+					ed = ans[i].Events[j].EndDate
+				}
+				if ans[i].Events[j].StartDate<st{
+					st = ans[i].Events[j].StartDate
+				}
+			}
+			st = st[5:10]
+			ed = ed[5:10]
+			pre := ds[st]
+			pre.Open = pre.Open+1 
+			ds[st] = pre
+			pre = ds[ed]
+			pre.Close = pre.Close+1 
+			ds[ed] = pre
+			fmt.Println(st," ",ed)
+		}
+		tmp1:=0
+		tmp2:=0
+		dates := make([]string,0)
+		opens := make([]int,0)
+		closes := make([]int,0)
+		keys := make([]string, 0)
+		for v := range ds {
+			keys = append(keys, v)
+		}
+		sort.Strings(keys)
+		for _,key := range keys {
+			v:=ds[key]
+			tmp1+=v.Open
+			tmp2+=v.Close
+			tmp1-=v.Close
+			dates = append(dates,key)
+			opens = append(opens,tmp1)
+			closes = append(closes,tmp2)
+		}
+		c.JSON(200, gin.H{"date": dates,
+							"active": opens,
+							"locked": closes})
+	}
+}
 func GetTrack() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data struct{

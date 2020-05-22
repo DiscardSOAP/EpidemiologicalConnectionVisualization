@@ -43,7 +43,7 @@ func FindNews(cats []string, username string,st string, ed string,num int,offset
 		qu = qu.Where("createBy=?",username)
 	}
 	if len(cats)>0 {
-		qu = qu.In("category",3)
+		qu = qu.In("category",cats)
 	}
 	ne := new(News)
 	count,_:= qu.Count(ne)
@@ -75,6 +75,15 @@ func FindTrack(cats string) []News{
 	return ans
 }
 
+func FindTrend(cats string) []News{
+	var ans []News
+	qu := dbEngine.Where("id >?",-1)
+	if len(cats)>0 {
+		qu = qu.In("category",cats)
+	}
+	qu.Find(&ans)
+	return ans
+}
 func (p News)Insert() News{
 	_, err := dbEngine.Insert(&p)
 	if err!=nil{

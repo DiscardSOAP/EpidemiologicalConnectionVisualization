@@ -36,6 +36,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/api/login/", api.Login())
 	router.POST("/api/auth/", api.GetAuth)
 	router.POST("/api/track/", api.GetTrack())
+	router.POST("/api/trend/", api.GetTrend())
 	router.POST("/api/newslib/", api.GetNews())
 	router.POST("/api/topology/", api.GetTopo())
 	router.GET("/api/topology/", api.GetTopoInfo())
