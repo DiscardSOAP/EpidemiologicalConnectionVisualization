@@ -28,10 +28,10 @@ func GetTrend() gin.HandlerFunc{
 			ed := ans[i].PublishTime
 			st := ans[i].PublishTime
 			for j:=0;j<len(ans[i].Events);j++{
-				if ans[i].Events[j].EndDate>ed{
+				if len(ans[i].Events[j].EndDate)>10&&ans[i].Events[j].EndDate>ed{
 					ed = ans[i].Events[j].EndDate
 				}
-				if ans[i].Events[j].StartDate<st{
+				if len(ans[i].Events[j].StartDate)>10&&ans[i].Events[j].StartDate<st{
 					st = ans[i].Events[j].StartDate
 				}
 			}
