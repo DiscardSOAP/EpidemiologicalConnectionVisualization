@@ -35,8 +35,8 @@ func GetTrend() gin.HandlerFunc{
 					st = ans[i].Events[j].StartDate
 				}
 			}
-			st = strings.Replace(st[5:10],"-","/",-1)
-			ed = strings.Replace(ed[5:10],"-","/",-1)
+			st = strings.Replace(st[0:10],"-","/",-1)
+			ed = strings.Replace(ed[0:10],"-","/",-1)
 			pre := ds[st]
 			pre.Open = pre.Open+1 
 			ds[st] = pre
