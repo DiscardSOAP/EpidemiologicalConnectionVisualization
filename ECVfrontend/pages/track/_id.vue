@@ -251,7 +251,7 @@ export default {
                     let human = new AMap.Marker({
                       map: o,
                       position: _.cloneDeep(patientRoute[0]),
-                      content: `<div style="width:25px;height:34px;background-image:url(https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> <div>${patient.id}</div> </div>`
+                      content: `<div style="width:25px;height:34px;background-image:url(https://i.loli.net/2020/05/28/HaQerMxyFq2KnsI.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> <div>${patient.id}</div> </div>`
                     })
                     self.humans.push(human)
                     AMap.event.addListener(human, 'click', function name () {
@@ -318,9 +318,15 @@ export default {
         let route = this.routes[id]
         let path = []
         let pos = route[0].pos
+        let minR = 1e9, minQ = 1e9, maxR = -1e9, maxQ = -1e9
         route.forEach(x => {
-          if (x.date == this.date)
+          if (x.date == this.date) {
             path.push(x.pos)
+            minR = Math.min(minR, x.pos[0])
+            minQ = Math.min(minQ, x.pos[1])
+            maxR = Math.max(maxR, x.pos[0])
+            maxQ = Math.max(maxQ, x.pos[1])
+          }
           if (moment(x.date) < moment(this.date))
             pos = x.pos
         })
@@ -329,7 +335,7 @@ export default {
         console.log(pos)
         human.setPosition(_.cloneDeep(pos))
         if (path.length > 0)
-          human.moveAlong(_.cloneDeep(path), 1000)
+          human.moveAlong(_.cloneDeep(path), Math.max(maxR - minR, maxQ - minQ) * 60000)
       }
     }
   }

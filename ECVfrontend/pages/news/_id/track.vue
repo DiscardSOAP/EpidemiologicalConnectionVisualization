@@ -70,7 +70,7 @@
         fab
         dark
         color="green"
-        @click="human.moveAlong(path,600)"
+        @click="human.moveAlong(path,velocity)"
       >
         <v-icon>mdi-google-play</v-icon>
       </v-btn>
@@ -80,7 +80,7 @@
 
 <script>
 import { AMapManager } from 'vue-amap';
-import moment from "moment"
+import moment, { max, min } from "moment"
 import VueAMap from 'vue-amap'
 let amapManager = new VueAMap.AMapManager();
 import * as _ from 'lodash';
@@ -96,6 +96,7 @@ export default {
       human: null,
       path: [],
       fab: false,
+      velocity: 600,
       mapEvents: {
         init (o) {
           console.log(self.date)
@@ -176,18 +177,19 @@ export default {
                       return 1;
                   })
                   let path = []
+                  let minR = 1e9, maxR = -1e9, minQ = 1e9, maxQ = -1e9
                   routes.forEach(x => {
                     path.push([x.R, x.Q])
+                    minR = Math.min(minR, x.R)
+                    maxR = Math.max(maxR, x.R)
+                    minQ = Math.min(minQ, x.Q)
+                    maxQ = Math.max(maxQ, x.Q)
                   })
+                  self.velocity = Math.max(maxR - minR, maxQ - minQ) * 60000
+                  console.log(Math.max(maxR - minR, maxQ - minQ))
                   console.log(path)
-                  let human = new AMap.Marker({
-                    map: o,
-                    position: _.cloneDeep(path[0]),
-                    icon: "https://webapi.amap.com/images/car.png",
-                    offset: new AMap.Pixel(-26, -13),
-                    autoRotation: true,
-                    angle: -90,
-                  });
+                  let humanContent = `<div style="width:25px;height:34px;background-image:url(https://i.loli.net/2020/05/28/HaQerMxyFq2KnsI.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> </div>`
+
                   var polyline = new AMap.Polyline({
                     map: o,
                     path: _.cloneDeep(path),
@@ -206,10 +208,7 @@ export default {
                     strokeWeight: 6,      //线宽
                     // strokeStyle: "solid"  //线样式
                   });
-                  self.human = human
                   self.path = path
-                  //human.moveAlong(_.cloneDeep(path), 200);
-                  o.setFitView();
 
                   mks.sort((a, b) => {
                     if (a.id < b.id)
@@ -223,7 +222,7 @@ export default {
                   let markers = []
                   let infoWindows = []
                   mks.forEach((mk, idx) => {
-                    let markerContent = `<div style="width:25px;height:34px;background-image:url(https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> <div>${idx + 1}</div> </div>`
+                    let markerContent = `<div style="width:25px;height:34px;background-image:url(https://i.loli.net/2020/05/28/d39PwI27fBvz1Fe.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> <div>${idx + 1}</div> </div>`
                     //console.log('!!!!')
                     var marker = new AMap.Marker({
                       map: o,
@@ -254,6 +253,19 @@ export default {
                       infoWindow.open(o, marker.getPosition());
                     });
                   })
+                  let human = new AMap.Marker({
+                    map: o,
+                    position: _.cloneDeep(path[0]),
+                    // icon: "https://i.loli.net/2020/05/28/HaQerMxyFq2KnsI.png",
+                    // offset: new AMap.Pixel(-26, -13),
+                    content: humanContent,
+                    //autoRotation: true,
+                    //angle: -90,
+                  });
+                  self.human = human
+                  //human.moveAlong(_.cloneDeep(path), 200);
+                  o.setFitView();
+
                   console.log(self.events)
                   let current = 0
                   human.on('moving', function (e) {
@@ -261,7 +273,7 @@ export default {
                     let currentPos = e.passedPath[e.passedPath.length - 1]
                     //console.log(currentPos.R, currentPos.Q)
 
-                    if (current < mks.length && Math.abs(currentPos.R - mks[current].R) + Math.abs(currentPos.Q - mks[current].Q) < 2e-4) {
+                    if (current < mks.length && Math.abs(currentPos.R - mks[current].R) + Math.abs(currentPos.Q - mks[current].Q) < 5e-4) {
                       //console.log(current)
                       self.date = self.events[current].startDate
                       if (self.events[current].startDate != self.events[current].endDate) {
