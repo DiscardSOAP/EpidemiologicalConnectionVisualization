@@ -253,6 +253,11 @@ export default {
                       position: _.cloneDeep(patientRoute[0]),
                       content: `<div style="width:25px;height:34px;background-image:url(https://i.loli.net/2020/05/28/HaQerMxyFq2KnsI.png);background-repeat:no-repeat;background-size:25px 34px;text-align:center;opacity: 0.8;"> <div>${patient.id}</div> </div>`
                     })
+                    if (moment(patientTrack[0].date) > moment(self.date) || moment(patientTrack[patientTrack.length - 1].date) < moment(self.date)) {
+                      human.hide()
+                    } else {
+                      human.show()
+                    }
                     self.humans.push(human)
                     AMap.event.addListener(human, 'click', function name () {
                       const { href } = self.$router.resolve({
@@ -316,6 +321,12 @@ export default {
         let human = this.humans[id]
         human.stopMove()
         let route = this.routes[id]
+        if (moment(route[0].date) > moment(this.date) || moment(route[route.length - 1].date) < moment(this.date)) {
+          human.hide()
+          continue
+        } else {
+          human.show()
+        }
         let path = []
         let pos = route[0].pos
         let minR = 1e9, minQ = 1e9, maxR = -1e9, maxQ = -1e9
