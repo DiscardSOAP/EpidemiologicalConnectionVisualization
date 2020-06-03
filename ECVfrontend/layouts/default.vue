@@ -134,11 +134,6 @@ export default {
         title: '发布新闻',
         to: '/news/edit/'
       })
-      this.items.push({
-        icon: 'mdi-information-outline',
-        title: '关于我们',
-        to: '/aboutus/'
-      })
     }
   },
   watch: {
@@ -155,20 +150,9 @@ export default {
           title: '发布新闻',
           to: '/news/edit/'
         })
-        this.items.push({
-          icon: 'mdi-information-outline',
-          title: '关于我们',
-          to: '/aboutus/'
-        })
       } else {
         this.items.pop()
         this.items.pop()
-        this.items.pop()
-        this.items.push({
-          icon: 'mdi-information-outline',
-          title: '关于我们',
-          to: '/aboutus/'
-        })
       }
     }
   },
@@ -191,6 +175,11 @@ export default {
           icon: 'mdi-google-maps',
           title: '中国疫情',
           to: '/topology/'
+        },
+        {
+          icon: 'mdi-information-outline',
+          title: '关于我们',
+          to: '/aboutus/'
         }
       ],
       title: 'ECV : 流行病学联系可视化'

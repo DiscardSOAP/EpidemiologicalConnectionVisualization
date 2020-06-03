@@ -268,12 +268,13 @@ export default {
 
                   console.log(self.events)
                   let current = 0
+                  console.log("velocity", self.velocity)
                   human.on('moving', function (e) {
 
                     let currentPos = e.passedPath[e.passedPath.length - 1]
                     //console.log(currentPos.R, currentPos.Q)
 
-                    if (current < mks.length && Math.abs(currentPos.R - mks[current].R) + Math.abs(currentPos.Q - mks[current].Q) < 5e-4) {
+                    if (current < mks.length && Math.abs(currentPos.R - mks[current].R) + Math.abs(currentPos.Q - mks[current].Q) < self.velocity * 6e-7) {
                       //console.log(current)
                       self.date = self.events[current].startDate
                       if (self.events[current].startDate != self.events[current].endDate) {
